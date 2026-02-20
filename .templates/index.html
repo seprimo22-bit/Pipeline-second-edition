@@ -1,2 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campbell Fact Pipeline</title>
+</head>
+<body>
 
-templates/index.html
+<h2>Campbell Fact Cognitive Pipeline</h2>
+
+<form method="POST">
+
+    <p>Question (optional)</p>
+    <textarea name="question" rows="3" cols="80"></textarea>
+
+    <p>Article Text</p>
+    <textarea name="article" rows="12" cols="80"></textarea>
+
+    <br><br>
+    <button type="submit">Run Fact Extraction</button>
+
+</form>
+
+<hr>
+
+<h3>Results</h3>
+<pre>{{ result }}</pre>
+
+</body>
+</html>
