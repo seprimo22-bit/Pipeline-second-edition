@@ -1,41 +1,53 @@
 import os
 from flask import Flask, render_template, request
-from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv()
-
+app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-app = Flask(__name__)
 
-
-def analyze_article(question, article):
+def analyze_article_metadata(article_text, question):
+    """
+    Pulls facts ABOUT the article:
+    - What type of study it is
+    - Methodology
+    - Scope
+    - Assumptions
+    - Limits
+    - Evidence base
+    """
 
     prompt = f"""
-You are a research fact extraction assistant.
+You are a strict fact extraction engine.
 
-IMPORTANT:
-- Do NOT repeat article text.
-- Provide facts ABOUT the article:
-  methodology
-  assumptions
-  limitations
-  scientific context
-  implications
-  credibility indicators.
+IMPORTANT RULES:
+- Extract facts ABOUT the article, not facts from the article topic.
+- Do NOT answer the user's question.
+- Do NOT diagnose or speculate.
+- Only describe the article itself.
 
-Question:
+Return structured facts:
+
+1. Article Type
+2. Research Goal
+3. Methodology Used
+4. Evidence/Data Sources
+5. Assumptions or Constraints
+6. Limits of Conclusions
+7. Confidence Level (High/Medium/Low)
+8. Unknowns or Missing Information
+
+User Question (context only):
 {question}
 
-Article:
-{article}
+Article Text:
+{article_text}
 """
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
+        temperature=0.2,
     )
 
     return response.choices[0].message.content
@@ -43,15 +55,16 @@ Article:
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-
-    result = ""
+    result = None
 
     if request.method == "POST":
         question = request.form.get("question", "")
-        article = request.form.get("article", "")
+        article_text = request.form.get("article_text", "")
 
-        if article.strip():
-            result = analyze_article(question, article)
+        if article_text.strip():
+            result = analyze_article_metadata(article_text, question)
+        else:
+            result = "No article text provided."
 
     return render_template("index.html", result=result)
 
