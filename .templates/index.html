@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fact Producing Analyzer</title>
+    <title>Campbell Fact Cognitive Pipeline</title>
 </head>
 <body>
 
-<h2>Fact Analyzer</h2>
+<h2>Campbell Fact Cognitive Pipeline</h2>
 
 <form method="POST">
-    <label>Question:</label><br>
-    <textarea name="question" rows="3" cols="80"></textarea><br><br>
+    <p>Question:</p>
+    <textarea name="question" rows="4" cols="80"></textarea>
 
-    <label>Article Text:</label><br>
-    <textarea name="article_text" rows="15" cols="80"></textarea><br><br>
+    <p>Optional Article Text:</p>
+    <textarea name="article_text" rows="10" cols="80"></textarea>
 
+    <br><br>
     <button type="submit">Run Fact Extraction</button>
 </form>
 
-<hr>
-
 {% if result %}
-<h3>Results:</h3>
+<hr>
+<h3>Result:</h3>
 <pre>{{ result }}</pre>
 {% endif %}
 
