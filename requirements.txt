@@ -1,0 +1,8 @@
+flask
+openai
+python-dotenv
+PyPDF2
+numpy
+scikit-learn
+gunicorn
+jinja2
